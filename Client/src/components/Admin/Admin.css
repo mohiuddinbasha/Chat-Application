@@ -1,0 +1,76 @@
+.table {
+    width: 50%;
+    text-align: center;
+    margin-top: 40px;
+    margin-left: 380px;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    border: 3px solid #ddd;
+}
+
+.containerAdmin {
+    height: 200vh;
+}
+
+.userNameInput {
+    border-radius: 0;
+    padding: 10px 15px;
+    width: 20%;
+}
+
+.userGmailIdInput {
+    border-radius: 0;
+    padding: 10px 15px;
+    width: 20%;
+    margin-left: 20px;
+}
+
+.buttonAdmin {
+    color: #fff !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #2979FF;
+    padding: 12px;
+    border-radius: 5px;
+    display: inline-block;
+    border: none;
+    width: 10%;
+    margin-left: 20px;
+}
+
+.inputDiv {
+    text-align: center;
+    padding: 50px;
+    margin-top: 10px;
+}
+
+.headingOne {
+    text-decoration: underline;
+    text-align: center;
+    margin-top: 80px;
+}
+
+.headingTwo {
+    text-decoration: underline;
+    text-align: center;
+    margin-top: 50px;
+}
+  
+.table td, .table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+  
+.table tr:nth-child(even){background-color: #f2f2f2;}
+
+.table tr:hover {background-color: #ddd;}
+
+.table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* @import '~bootstrap/dist/css/bootstrap.css'; */
