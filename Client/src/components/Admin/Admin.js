@@ -11,7 +11,6 @@ const Admin = () => {
     const [gmailId, setGmailId] = useState('');
     const [adminName, setAdminName] = useState('');
     const [adminGmailId, setAdminGmailId] = useState('');
-    // const [data, setData] = useState([]);
     const ENDPOINT = 'localhost:5000';
     const location = useLocation();
     const history = useHistory();
@@ -20,14 +19,11 @@ const Admin = () => {
     useEffect(() => {
         const abort = new AbortController();
         const variable = location.state;
-        
+        // Receiving state props from url
         if (variable) {
-            console.log(variable.name);
-            console.log(variable.email);
             setAdminName(variable.name);
             setAdminGmailId(variable.email);
         } else {
-            console.log("Coming Here");
             history.push('/admin-login');
             return abort.abort();
         }
@@ -36,6 +32,7 @@ const Admin = () => {
     
     useEffect(() => {
         socket = io(ENDPOINT);
+        // Invoking server to get users list data
         socket.emit('getInfo', () => {
             console.log("Connected");
         })
@@ -49,6 +46,7 @@ const Admin = () => {
         if (userName.length === 0 || gmailId.length === 0) {
             alert('Fill the fields')
         } else {
+            // Sending request to server for new admin
             socket.emit('newAdmin', {name: userName, email: gmailId}, (error) => {
                 if (error) {
                     alert(`${gmailId} successfully registered`); 
@@ -61,14 +59,11 @@ const Admin = () => {
 
 
     useEffect(() => {
-        socket.on('comeOn', (data) => {
+        // Receiving the user list data
+        socket.on('userData', (data) => {
             console.log(data);
-            // console.log(Array.isArray(data['users']));
-            // console.log(Object.keys(data));
             setLinks([]);
             data['users'].map((item) => (setLinks(links => [ ...links, { name: item.name, room: item.room, status: item.status }])));
-            // console.log(data["users"]);
-            // console.log(links);
         })
     }, [ENDPOINT, links]);
 

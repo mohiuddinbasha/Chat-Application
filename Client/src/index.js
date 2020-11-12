@@ -1,3 +1,4 @@
+// This is the starting file to be executed
 import React from 'react';
 import ReactDOM from 'react-dom';
 

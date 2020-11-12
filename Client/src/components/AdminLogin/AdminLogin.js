@@ -12,7 +12,7 @@ export default function SignIn() {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-
+    // Receives data from server whether the user is valid admin or not
     socket.on('adminDetails', (data) => {
       console.log(data);
       if (!data.boolean) {
@@ -26,7 +26,7 @@ export default function SignIn() {
         }
     })
   })
-
+  // Checking for valid admin by requesting server
   function sendEmail(mail) {
     socket.emit('checkAdmin', {mail}, (callback) => {
         console.log("Success");
@@ -45,8 +45,7 @@ export default function SignIn() {
               console.log(response.profileObj);
               sendEmail(response.profileObj.email);
             }}
-            onFailure={(response) => {console.log(response);
-              console.log(response.profileObj);}}
+            onFailure={() => alert.show('Failure')}
             cookiePolicy={'single_host_origin'}
           
           />

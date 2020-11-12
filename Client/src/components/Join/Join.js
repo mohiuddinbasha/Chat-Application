@@ -1,15 +1,17 @@
+// This javascript is rendered for the student login page
 import React, { useState } from 'react';
 import GoogleLogin from 'react-google-login';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 
 import './Join.css';
 
 export default function SignIn() {
+  // State variables; useState() Hook returns a pair of values: current state and function that updates the state
   const [name, setName] = useState('');
-  const room = name + (Math.floor(Math.random() * 100000) + 1);
-  // const room = 123;
+  const room = name + (Math.floor(Math.random() * 100000) + 1); // Generating a room id (name + 5 digit random number)
+  // useHistory() hook is used for navigate between routes
   const history = useHistory();
-
+  
   return (
     <div className="joinOuterContainer">
       <div className="joinInnerContainer">

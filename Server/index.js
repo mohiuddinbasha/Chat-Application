@@ -19,7 +19,7 @@ const admins = [];
 
 app.use(cors());
 app.use(router);
-
+// Postgresql Database
 const client = new Client({
   connectionString: DATABASE_URI,
   ssl: {
@@ -38,9 +38,11 @@ client.query(`SELECT * from admin`, (err, res) => {
   // client.end();
 });
 
-
+// This invokes when socket is trying to connect
 io.on('connect', (socket) => {
+  // Invokes when user is trying to join
   socket.on('join', ({ name, room, email }, callback) => {
+    // Condition for checking whether the user is already in session or not
     if(users.find((user) => user.email === email)) {
       return callback('You are already in session. Only one session per mail!');
     }
@@ -49,11 +51,7 @@ io.on('connect', (socket) => {
     const { error, user } = addUser({ id: socket.id, name, room, email, status, conversations });
     
     if(error) return callback(error);
-    // console.log(email);
-    // console.log(socket.id);
     const temp = admins.findIndex((admin) => admin.email === email);
-    // console.log(temp);
-    // console.log(admins);
     if (temp === -1) {
       users.push(user);
     } else {
@@ -65,8 +63,9 @@ io.on('connect', (socket) => {
     }
 
     socket.join(user.room);
-
+    // Sending welcome message
     socket.emit('message', { user: 'Admin', text: `Welcome ${user.name}.`});
+    // Broadcasting everyone in the room that new user has joined
     socket.broadcast.to(user.room).emit('message', { user: 'Admin', text: `${user.name} has joined!` });
 
     io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
@@ -78,7 +77,6 @@ io.on('connect', (socket) => {
     const user = getUser(socket.id);
     //If user is a student => user.conversations = message
     //If user is a tutor => tutor room id => student user.conversations = message
-    // console.log(user);
     if (!users.includes(user)) {
       const text = "Tutor: "+message;
       user.conversations.push(text);
@@ -95,13 +93,13 @@ io.on('connect', (socket) => {
 
     callback();
   });
-
+  // Sending user list data for admin page
   socket.on('getInfo', (callback) => {
-    socket.emit('comeOn', { users });
+    socket.emit('userData', { users });
     callback();
   });
 
-
+  // Adding of new admin
   socket.on('newAdmin', (adminObject, callback) => {
     if (validator.isEmail(adminObject.email)) {
       const array = [adminObject.name, adminObject.email];
@@ -119,26 +117,24 @@ io.on('connect', (socket) => {
       callback(false);
     }
   })
-
+  // Checking for valid admin
   socket.on('checkAdmin', (data) => {
       const mail = data.mail;
-      // console.log(data.mail);
       const temp = admins.findIndex((admin) => admin.email === mail);
       let name = '';
       let email = '';
       if (temp === -1) {
         const boolean = false;
+        // Sending details of valid admin or not
         socket.emit('adminDetails', { boolean, name, email });
       } else {
         const boolean = true;
         name = admins[temp].name;
         email = admins[temp].email;
-        // console.log(name);
-        // console.log(email);
         socket.emit('adminDetails', { boolean, name, email });
       }
   })
-
+  // This is invoked when socket is removed
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
     
